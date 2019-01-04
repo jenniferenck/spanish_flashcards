@@ -40,10 +40,7 @@ class User {
     const token = jwt.sign({ username }, SECRET_KEY);
 
     return {
-      token: token,
-      last_login: result.rows[0].last_login,
-      current_streak: result.rows[0].current_streak,
-      longest_streak: result.rows[0].longest_streak
+      token: token
     };
   }
 
@@ -65,7 +62,6 @@ class User {
     } = search.rows[0];
 
     console.log('current_streak......', current_streak);
-    let longestStreak = longest_streak;
 
     if (await bcrypt.compare(enteredPassword, password)) {
       const token = jwt.sign({ username }, SECRET_KEY, {});
@@ -87,22 +83,22 @@ class User {
       }
 
       //   update longest streak (if applicable)
-      if (current_streak > longestStreak) {
-        longestStreak = current_streak;
+      if (current_streak > longest_streak) {
+        longest_streak = current_streak;
       }
 
       // 5. update timestamp for last login field
       await db.query(
-        `UPDATE users SET last_login = $1, current_streak = $2, longest_streak = $3 WHERE username = $4 RETURNING last_login`,
+        `UPDATE users SET last_login = $1, current_streak = $2, longest_streak = $3 WHERE username = $4 RETURNING *`,
         [newLoginDate, current_streak, longest_streak, username]
       );
 
       // 7. compare current streak with longest streak
       return {
         token: token,
-        last_login: last_login,
-        current_streak: current_streak,
-        longest_streak: longestStreak
+        last_login,
+        current_streak,
+        longest_streak
       };
     }
     throw new Error({ message: 'Invalid user/password, please try again' });
@@ -154,6 +150,14 @@ class User {
       [username]
     );
     return cards.rows;
+  }
+
+  static async getUserInfo(username) {
+    const search = await db.query(
+      `SELECT username, password, last_login, current_streak, longest_streak FROM users WHERE username = $1`,
+      [username]
+    );
+    return search.rows[0];
   }
 } // END USER CLASS
 

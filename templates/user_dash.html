@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ username }}{% endblock %}
+
+{% block body %}
+
+<!-- change to reservation name -->
+<h1>{{ customer.fullName }}</h1>
+
+<div class="row">
+
+  <div class="container justify-content-center">
+
+      
+      <h2>Dashboard</h2>
+      
+      <ul>
+          <li><a href="#">Needs Practice!</a></li>
+          <li><a href="#">Practice in # of Days</a></li>
+          <li><a href="#">Practice Later</a></li>
+        </ul>
+        
+        
+        
+    </div>
+    
+    <p><a class="btn btn-primary" href="/{{ customer.id }}/edit/">Edit</a></p>
+</div>
+
+{% endblock %}
