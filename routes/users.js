@@ -35,6 +35,7 @@ router.get('/login', async function(req, res, next) {
 router.post('/register', async function(req, res, next) {
   try {
     const { username, password, email } = req.body;
+    console.log('username from body....', username, password, email);
     const { token } = await register(username, password, email);
 
     // NEED TO WORK ON THIS!
