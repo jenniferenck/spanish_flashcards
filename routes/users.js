@@ -13,7 +13,11 @@ const {
 
 /** Routes for the user: */
 
-// Display user registration page:
+/** GET: Display user registration page:
+ *
+ * currently rendered via templates - NEED TO UPDATE W/ REACT
+ */
+
 router.get('/register', async function(req, res, next) {
   try {
     return res.render('user_registration.html');
@@ -22,7 +26,10 @@ router.get('/register', async function(req, res, next) {
   }
 });
 
-// Display user login page:
+/** GET: Display user login page:
+ *
+ * currently rendered via templates - NEED TO UPDATE W/ REACT
+ */
 router.get('/login', async function(req, res, next) {
   try {
     return res.render('user_login.html');
@@ -31,42 +38,46 @@ router.get('/login', async function(req, res, next) {
   }
 });
 
-// New user registration - returns all user info:
+/** POST: New user registration -
+ *
+ * returns token in JSON for front-end to manipulate:
+ * */
 router.post('/register', async function(req, res, next) {
   try {
     const { username, password, email } = req.body;
     console.log('username from body....', username, password, email);
     const { token } = await register(username, password, email);
 
-    // NEED TO WORK ON THIS!
-    res.set({ Authorization: token });
-    res.header('Authorization', token);
-    console.log(username);
-
-    return res.redirect(`/users/${username}`);
+    return res.JSON({ token: token });
   } catch (error) {
     // may need to change this to an API error...
     return next(error);
   }
 });
 
-// Login - returns all user info:
-// Should we return all card info?
+/** POST: login user -
+ *
+ * returns token in JSON for front-end to manipulate:
+ *
+ * when FRONT-END submits a form, page will refresh - HOW do we go to the next page?
+ * */
 router.post('/login', async function(req, res, next) {
   try {
     const { username, password } = req.body;
     const { token } = await login(username, password);
-    // determine who to send token to next route
 
-    res.header('Authorization', token);
-    console.log(res);
-    return res.redirect(`/users/${username}`);
+    return res.JSON({ token: token });
   } catch (error) {
     return next(error);
   }
 });
 
-// View profile with all saved cards (view by category)
+/** GET: user info, including saved cards -
+ *
+ * returns...
+ *
+ *
+ * */
 router.get('/:username', async function(req, res, next) {
   try {
     const username = req.params.username;
