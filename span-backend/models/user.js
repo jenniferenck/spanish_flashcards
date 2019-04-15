@@ -17,6 +17,7 @@ moment().format();
 class User {
   /** Register a new user:
    * search for pre-exisitng user and then add to db if unique username
+   * Return a token on success
    */
   static async register(username, password, email) {
     const search = await searchUser(username);
