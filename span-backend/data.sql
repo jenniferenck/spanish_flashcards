@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS spanish_flashcards;
--- CREATE DATABASE spanish_flashcards;
+DROP DATABASE IF EXISTS flashcards;
+-- CREATE DATABASE flashcards;
 
 CREATE TABLE users
 (
@@ -8,67 +8,78 @@ CREATE TABLE users
     email TEXT NOT NULL,
     last_login TIMESTAMP NOT NULL DEFAULT current_timestamp,
     current_streak INTEGER NOT NULL DEFAULT 0,
-    longest_streak INTEGER NOT NULL DEFAULT 0,
-    high_score INTEGER NOT NULL DEFAULT 0
+    longest_streak INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE libraries
+(
+    name TEXT UNIQUE,
+    description TEXT,
+    last_active_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    PRIMARY KEY (name)
 );
 
 CREATE TABLE cards
 (
     id SERIAL NOT NULL UNIQUE PRIMARY KEY,
-    english TEXT NOT NULL,
-    spanish TEXT NOT NULL,
-    part_of_speech TEXT NOT NULL,
-    category TEXT NOT NULL
+    front_side TEXT NOT NULL,
+    back_side TEXT NOT NULL,
+    hint TEXT,
+    library TEXT NOT NULL,
+    last_active_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    flagged BOOLEAN NOT NULL DEFAULT false,
+    FOREIGN KEY (library) REFERENCES libraries (name) ON DELETE CASCADE
 );
 
-CREATE TABLE user_saved_cards
-(
-    username TEXT NOT NULL REFERENCES users,
-    card_id INTEGER NOT NULL REFERENCES cards (id)
-);
+INSERT INTO libraries(name, description)
+VALUES('english-spanish', 'english to spanish vocabulary practice');
+INSERT INTO libraries(name, description)
+VALUES('frontend coding vocab', 'frontend/javascript syntax practice');
+INSERT INTO libraries(name, description)
+VALUES('computer science vocab', 'computer science fundamentals - DSA');
 
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('apple', 'manzana', 'noun', 'fruit');
+    ('apple', 'manzana', 'fruit', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('grape', 'uva', 'noun', 'fruit');
+    ('grape', 'uva', 'fruit', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('banana', 'platano', 'noun', 'fruit');
+    ('banana', 'platano', 'fruit', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('strawberry', 'fresca', 'noun', 'fruit');
+    ('strawberry', 'fresca', 'fruit', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('blueberry', 'arádano', 'noun', 'fruit');
+    ('blueberry', 'arádano', 'fruit', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('pineapple', 'piña', 'noun', 'fruit');
+    ('pineapple', 'piña', 'fruit', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('peach', 'melocotón', 'noun', 'fruit');
+    ('peach', 'melocotón', 'fruit', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('run', 'correr', 'verb', 'movement');
+    ('run', 'correr', 'movement', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('walk', 'caminar', 'verb', 'movement');
+    ('walk', 'caminar', 'movement', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('dance', 'bailar', 'verb', 'movement');
+    ('dance', 'bailar', 'movement', 'english-spanish');
 INSERT INTO cards
-    (english, spanish, part_of_speech, category)
+    (front_side, back_side, hint, library)
 VALUES
-    ('skip', 'saltar', 'verb', 'movement');
+    ('skip', 'saltar', 'movement', 'english-spanish');
 
