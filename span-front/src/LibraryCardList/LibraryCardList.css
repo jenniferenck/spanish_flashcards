@@ -1,0 +1,4 @@
+.library-list {
+    display: inline-flex;
+    flex-direction: row;
+}
